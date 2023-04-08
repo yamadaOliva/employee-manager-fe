@@ -1,0 +1,23 @@
+.red {
+    border: 1px solid red;
+}
+.green {
+    border: 1px solid green;
+}
+
+.login-containers{
+    
+    .content-right{
+        border-radius: 10px;
+        border: 1px solid #e5e5e5;
+       
+    }
+
+    .content-left{
+        .text-logo{
+            font-size: 30px;
+            font-weight: 700;
+            color: #1877f2;
+        }
+    }
+}
