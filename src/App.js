@@ -2,6 +2,8 @@ import React from 'react';
 import Nav from './components/Navigation/Nav';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   BrowserRouter as Router,
   Switch,
@@ -37,6 +39,20 @@ function App() {
                     404
                 </Route>
             </Switch>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                />
+                {/* Same as */}
+            <ToastContainer />
         </Router>
   );
 }

@@ -2,8 +2,17 @@
 import "./Login.scss";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 export default function Login(props) {
     const history = useHistory();
+    useEffect(() => {
+        axios.get("http://localhost:8080/api/test")
+            .then(res => {
+                console.log(res);
+            })
+    }
+    , []);
     const handleRegister = () => {
         history.push("/register");
     }
