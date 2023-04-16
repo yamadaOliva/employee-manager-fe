@@ -22,36 +22,57 @@ export default function Login(props) {
   const handleRegister = () => {
     history.push("/register");
   };
+  const clearInput = () => {
+    setEmail("");
+    setPassword("");
+    setDataInput(defaultDataInput);
+    };
   const validationInput = () => {
     if (!email) {
-        toast.error("Email is required");
-        setDataInput({ ...dataInput, email: false });
-        return false;
-      }
-      //regext email
-      const regexEmail =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (!regexEmail.test(email)) {
-        toast.error("Email is not valid");
-        setDataInput({ ...dataInput, email: false });
-        return false;
-      }
-      if (!password) {
-        toast.error("Password is required");
-        setDataInput({ ...dataInput, password: false });
-        return false;
-      }
-      return true;
-  }
-  const handleLogin =async () => {
-   if(validationInput()){
-    const res = await LoginService(email, password);
-    if(+res.data?.EC==200){
-        toast.success("Login success");
-        setEmail("");
-        setPassword("");
+      toast.error("Email is required");
+      setDataInput({ ...dataInput, email: false });
+      return false;
     }
-   }
+    //regext email
+    const regexEmail =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!regexEmail.test(email)) {
+      toast.error("Email is not valid");
+      setDataInput({ ...dataInput, email: false });
+      return false;
+    }
+    if (!password) {
+      toast.error("Password is required");
+      setDataInput({ ...dataInput, password: false });
+      return false;
+    }
+    return true;
+  };
+  const handleLogin = async () => {
+    if (validationInput()) {
+      const res = await LoginService(email, password);
+      console.log(res);
+        switch(+res.data?.EC){
+            case 200:
+                toast.success("Login success");
+                let data = {
+                    isAuthenticated: true,
+                    token: "fake token",
+                }
+                sessionStorage.setItem("user", JSON.stringify(data));
+                history.push("/users");
+                clearInput();
+                break;
+            case -3:
+                toast.error("Email or password is not correct");
+                clearInput();
+                break;
+            case -4:
+                toast.error("Email or password is not correct");
+                clearInput();
+                break;
+        }
+    }
   };
   return (
     <div className="login-containers mt-5">
