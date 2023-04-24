@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { LoginService } from "../../services/Login";
 import axios from "axios";
+
 export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [modalDelete, setModalDelete] = useState(false);
   const defaultDataInput = {
     email: true,
     password: true,
@@ -15,9 +17,11 @@ export default function Login(props) {
   const [dataInput, setDataInput] = useState(defaultDataInput);
   const history = useHistory();
   useEffect(() => {
-    axios.get("http://localhost:8080/api/test").then((res) => {
-      console.log(res);
-    });
+    let session = sessionStorage.getItem("user");
+    if (session) {
+      history.push("/users");
+      window.location.reload();
+    }
   }, []);
   const handleRegister = () => {
     history.push("/register");
@@ -75,6 +79,7 @@ export default function Login(props) {
     }
   };
   return (
+    <>
     <div className="login-containers mt-5">
       <div className="container">
         <div className="row">
@@ -124,5 +129,6 @@ export default function Login(props) {
         </div>
       </div>
     </div>
+    </>
   );
 }

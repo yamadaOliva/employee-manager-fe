@@ -14,17 +14,20 @@ import {
 } from "react-router-dom";
 function App() {
     const [user, setUser] = useState({});
+    const [isLogin, setIsLogin] = useState(false);
     useEffect(() => {
         let session = sessionStorage.getItem('user');
         if(!_.isEmpty(session)){
             setUser(JSON.parse(session));
+        }else{
+            setIsLogin(false);
         }
     }, []);
   return (
         <Router>
-            <div>
-               <Nav />
-            </div>
+            {
+                user ? <Nav/> : null
+            }
             <AppRoutes />
             <ToastContainer
                 position="top-right"

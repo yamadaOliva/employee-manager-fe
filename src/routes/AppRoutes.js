@@ -1,8 +1,6 @@
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
-    Link
   } from "react-router-dom";
 import Login from '../components/Login/Login'
 import Register from '../components/Register/Register';
@@ -12,12 +10,7 @@ const AppRoutes = (props) => {
     return (
         <>
         <Switch>
-                <Route path="/" exact >
-                    Home
-                </Route>
-                <Route path="/project">
-                    Contact 123123
-                </Route>
+                <PrivateRoutes path="/" exact />
                 <PrivateRoutes path="/users" component={Users} />
                 <Route path="/login">
                     <Login />
@@ -28,6 +21,7 @@ const AppRoutes = (props) => {
                 <Route path="*">
                     404
                 </Route>
+                
             </Switch>
         </>
     );

@@ -6,8 +6,8 @@ export default function Nav(props) {
             <div>
                 <div class="topnav">
                     <NavLink to="/" exact>Home</NavLink>
-                    <NavLink to="/news">News</NavLink>
-                    <NavLink to="/contact">Contact</NavLink>
+                    <NavLink to="/users">Users</NavLink>
+                    <NavLink to="/project">project</NavLink>
                     <NavLink to="/about">About</NavLink>
                 </div>
             </div>
