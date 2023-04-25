@@ -1,3 +1,6 @@
+
+import "./User.scss";
+import { set } from "lodash";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState, useEffect } from "react";
@@ -6,8 +9,7 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 //import scss file
 import "./User.scss";
-import { set } from "lodash";
-const ModalCreate = (props) => {
+const ModalEdit = (props) => {
   const [groups, setGroups] = useState([]);
   const [isShow, setIsShow] = useState(false);
   let dataDefault = {
@@ -25,14 +27,21 @@ const ModalCreate = (props) => {
     if (+response?.data?.EC == 200) {
       setGroups(response?.data?.DT);
     }
+    
   }, []);
+  useEffect(()=>{
+    console.log(props.user)
+    setDataRaw(props.user)
+  },[props.user])
+  useEffect( () => {
+    
+    setDataRaw(props.user)
+    console.log(dataRaw)
+  }, [dataRaw]);
   const handleInput = (value, name) => {
     let dataPtr = _.cloneDeep(dataRaw);
     dataPtr[name] = value;
     setDataRaw(dataPtr);
-  };
-  const handleClose = () => {
-    return true;
   };
   const handleCreate = async () => {
     let response = await createNewUser(dataRaw);
@@ -54,7 +63,7 @@ const ModalCreate = (props) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Create New User
+            Edit User
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -159,4 +168,4 @@ const ModalCreate = (props) => {
     </>
   );
 };
-export { ModalCreate };
+export { ModalEdit };

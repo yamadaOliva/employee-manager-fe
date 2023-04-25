@@ -4,6 +4,7 @@ import ReactPaginate from "react-paginate";
 import {toast} from "react-toastify";
 import {ModalDelete} from "./ModalDelete";
 import {ModalCreate} from "./ModalCreate";
+import {ModalEdit} from "./ModalEdit";
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
@@ -12,6 +13,8 @@ const Users = () => {
   const [modalDelete, setModalDelete] = useState(false);
   const [idDelete, setIdDelete] = useState(0);
   const [modalCreate, setModalCreate] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
+  const [userEdit, setUserEdit] = useState({});
   const handlePageClick = (event) => {
     setPage(event.selected + 1);
   };
@@ -25,18 +28,32 @@ const Users = () => {
   const handleCreate = () => {
     setModalCreate(true);
   }
-  const handleCloseModalCreate = () => {
+  const handleCloseModalEdit = () => {
+    setModalEdit(false);
+  }
+  const handleEdit = (item) => {
+    setModalEdit(true);
+    setUserEdit(item);
+  }
+  const handleCloseModalCreate = async () => {
+    console.log("close modal create");
     setModalCreate(false);
+    let userList = await getUserByPage(page, limit);
+    if (+userList.data.data2.EC == 200) {
+      setUsers(userList.data.data2.DT.users);
+      setTotalPage(+userList.data.data2.DT.totalPages);
+    } else {
+      alert(userList.data.data2.EM);
+    }
   }
-  const handleCreateButton = (data) => {
-    console.log(data);
-  }
+  
   const confirmDelete = async () => {
     let response = await deleteUser(idDelete);
     console.log(response);
     let userList = await getUserByPage(page, limit);
     if (+userList.data.data2.EC == 200) {
       setUsers(userList.data.data2.DT.users);
+      setTotalPage(+userList.data.data2.DT.totalPages);
       toast.success("Delete success");
     } else {
       alert(userList.data.data2.EM);
@@ -44,6 +61,7 @@ const Users = () => {
     setModalDelete(false);
   }
 
+  
   useEffect(async () => {
     let userList = await getUserByPage(page, limit);
     if (+userList.data.data2.EC == 200) {
@@ -61,6 +79,7 @@ const Users = () => {
       alert(userList.data.data2.EM);
     }
   }, [page]);
+
   return (
     <>
     <div className="manage-user container">
@@ -85,13 +104,14 @@ const Users = () => {
             <th scope="col">Group</th>
             <th scope="col">Sex</th>
             <th scope="col">Phone</th>
+            <th scope="col">actions</th>
           </thead>
           <tbody>
             {users && users.length > 0 ? (
               users.map((item, index) => {
                 return (
                   <tr key = {`row-${index}`}>
-                    <td>{index + 1}</td>
+                    <td>{index + 1 +(page-1)*limit}</td>
                     <td>{item.id}</td>
                     <td>{item.email}</td>
                     <td>{item.username}</td>
@@ -99,7 +119,9 @@ const Users = () => {
                     <td>{item.sex}</td>
                     <td>{item.phone}</td>
                     <td>
-                        <button className="btn btn-primary">Edit</button>
+                        <button className="btn btn-primary m-3"
+                        onClick = {() => handleEdit(item)}
+                        >Edit</button>
                         <button className="btn btn-danger"
                         onClick = {() => handleDelete(item.id)}
                         >Delete</button>
@@ -144,7 +166,11 @@ const Users = () => {
     <ModalCreate
       show ={modalCreate}
       handleClose = {handleCloseModalCreate}
-      
+    />
+    <ModalEdit
+      show = {modalEdit}
+      handleClose = {handleCloseModalEdit}
+      user ={userEdit}
     />
     </>
     

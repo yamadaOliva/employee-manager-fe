@@ -11,7 +11,13 @@ const deleteUser = (id) => {
   return axios.delete(`http://localhost:8080/api/v1/users/delete`,{data : {id : id}});
 }
 
+const createNewUser = (data) =>{
+  return axios.post('http://localhost:8080/api/v1/users/create',data)
+}
+
 const getGroups = () => {
   return axios.get("http://localhost:8080/api/v1/groups/read");
 };
-export { getListUsers, getUserByPage, deleteUser,getGroups };
+
+
+export { getListUsers, getUserByPage, deleteUser,getGroups, createNewUser };
