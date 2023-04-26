@@ -1,10 +1,9 @@
-
 import "./User.scss";
 import { set } from "lodash";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState, useEffect } from "react";
-import { getGroups, createNewUser } from "../../services/UsersService";
+import { getGroups, createNewUser,editUser } from "../../services/UsersService";
 import _ from "lodash";
 import { toast } from "react-toastify";
 //import scss file
@@ -13,12 +12,12 @@ const ModalEdit = (props) => {
   const [groups, setGroups] = useState([]);
   const [isShow, setIsShow] = useState(false);
   let dataDefault = {
-    userName: "",
+    username: "",
     email: "",
-    password: "",
+    password: "*******************",
     phone: "",
     sex: "",
-    group: "",
+    groupID: "",
     address: "",
   };
   const [dataRaw, setDataRaw] = useState(dataDefault);
@@ -27,29 +26,27 @@ const ModalEdit = (props) => {
     if (+response?.data?.EC == 200) {
       setGroups(response?.data?.DT);
     }
-    
   }, []);
-  useEffect(()=>{
-    console.log(props.user)
-    setDataRaw(props.user)
-  },[props.user])
-  useEffect( () => {
-    
-    setDataRaw(props.user)
-    console.log(dataRaw)
-  }, [dataRaw]);
+  useEffect(() => {
+    console.log(props.user);
+    setDataRaw(props.user);
+  }, [props.user]);
+  useEffect(() => {
+    setDataRaw(props.user);
+    console.log(dataRaw);
+  }, [props.user]);
   const handleInput = (value, name) => {
     let dataPtr = _.cloneDeep(dataRaw);
     dataPtr[name] = value;
     setDataRaw(dataPtr);
   };
   const handleCreate = async () => {
-    let response = await createNewUser(dataRaw);
-    setDataRaw(dataDefault);
-    if (+response.data.EC == 200) {
+    let response = await editUser(dataRaw);
+    console.log(response.data)
+    if (+response.data.data.EC == 200) {
       props.handleClose();
       toast.success("Add user success");
-    }else{
+    } else {
       props.handleClose();
       toast.warning("Add user failed");
     }
@@ -68,15 +65,15 @@ const ModalEdit = (props) => {
         </Modal.Header>
         <Modal.Body>
           <div className="content-body row">
-            <div className="col-12 col-sm-6 form-group mt-3">
+            <div className="col-12 col-sm-6 form-group mt-3 ">
               <label>
                 Email address(<span className="red">*</span>):
               </label>
               <input
-                className="form-control"
+                disabled
+                className="form-control bg-secondary"
                 type="email"
                 value={dataRaw.email}
-                onChange={(e) => handleInput(e.target.value, "email")}
               ></input>
             </div>
             <div className="col-12 col-sm-6 form-group mt-3">
@@ -84,10 +81,10 @@ const ModalEdit = (props) => {
                 Phone Number(<span className="red">*</span>):
               </label>
               <input
-                className="form-control"
+                disabled
+                className="form-control bg-secondary"
                 type="text"
                 value={dataRaw.phone}
-                onChange={(e) => handleInput(e.target.value, "phone")}
               ></input>
             </div>
             <div className="col-12 col-sm-6 form-group mt-3">
@@ -97,19 +94,19 @@ const ModalEdit = (props) => {
               <input
                 className="form-control"
                 type="text"
-                value={dataRaw.userName}
-                onChange={(e) => handleInput(e.target.value, "userName")}
+                value={dataRaw.username}
+                onChange={(e) => handleInput(e.target.value, "username")}
               ></input>
             </div>
-            <div className="col-12 col-sm-6 form-group mt-3">
+            <div className="col-12 col-sm-6 form-group mt-3 ">
               <label>
                 Password(<span className="red">*</span>):
               </label>
               <input
-                className="form-control"
+                disabled
+                className="form-control bg-secondary"
                 type="password"
-                value={dataRaw.password}
-                onChange={(e) => handleInput(e.target.value, "password")}
+                value="*******************"
               ></input>
             </div>
             <div className="col-12 col-sm-12 form-group mt-3">
@@ -128,6 +125,7 @@ const ModalEdit = (props) => {
               <select
                 className="form-select"
                 onChange={(e) => handleInput(e.target.value, "sex")}
+                value={dataRaw.sex}
               >
                 <option defaultValue="Male" value="Male">
                   Male
@@ -142,8 +140,8 @@ const ModalEdit = (props) => {
               </label>
               <select
                 className="form-select"
-                defaultValue="Customer"
-                onChange={(e) => handleInput(e.target.value, "group")}
+                value={dataRaw.groupID}
+                onChange={(e) => handleInput(e.target.value, "groupID")}
               >
                 {groups.map((item, index) => {
                   return (

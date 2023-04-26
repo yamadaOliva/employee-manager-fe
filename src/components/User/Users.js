@@ -28,7 +28,13 @@ const Users = () => {
   const handleCreate = () => {
     setModalCreate(true);
   }
-  const handleCloseModalEdit = () => {
+  const handleCloseModalEdit =async () => {
+    let userList = await getUserByPage(page, limit);
+    if (+userList.data.data2.EC == 200) {
+      setUsers(userList.data.data2.DT.users);
+    } else {
+      alert(userList.data.data2.EM);
+    }
     setModalEdit(false);
   }
   const handleEdit = (item) => {
@@ -84,19 +90,20 @@ const Users = () => {
     <>
     <div className="manage-user container">
       <div className="user-header">
-        <div className="title">
+        <div className="title mt-3">
           <h3>User manage</h3>
         </div>
         <div className="actions">
-          <button className="btn btn-success">Add user</button>
+          <button className="btn btn-success me-3"><i className="fa fa-refresh"></i>efresh</button>
           <button className="btn btn-primary"
           onClick = {handleCreate}
-          >Add New users</button>
+          ><i className="fa fa-plus-circle"></i>Add New users</button>
         </div>
       </div>
       <div className="user-body mt-5">
-        <table className="table table-bordered table-hover">
+        <table className="table table-striped table-hover">
           <thead>
+          <tr>
             <th scope="col">no</th>
             <th scope="col">Id</th>
             <th scope="col">Email</th>
@@ -105,13 +112,14 @@ const Users = () => {
             <th scope="col">Sex</th>
             <th scope="col">Phone</th>
             <th scope="col">actions</th>
+            </tr>
           </thead>
           <tbody>
             {users && users.length > 0 ? (
               users.map((item, index) => {
                 return (
                   <tr key = {`row-${index}`}>
-                    <td>{index + 1 +(page-1)*limit}</td>
+                    <th scope="row">{index + 1 +(page-1)*limit}</th>
                     <td>{item.id}</td>
                     <td>{item.email}</td>
                     <td>{item.username}</td>
@@ -119,12 +127,12 @@ const Users = () => {
                     <td>{item.sex}</td>
                     <td>{item.phone}</td>
                     <td>
-                        <button className="btn btn-primary m-3"
+                        <button className="btn btn-primary me-3"
                         onClick = {() => handleEdit(item)}
-                        >Edit</button>
+                        ><i class="fa fa-pencil" ></i>Edit</button>
                         <button className="btn btn-danger"
                         onClick = {() => handleDelete(item.id)}
-                        >Delete</button>
+                        ><i class="fa fa-trash" ></i>Delete</button>
                     </td>
                   </tr>
                 );
@@ -135,7 +143,10 @@ const Users = () => {
               </tr>
             )}
           </tbody>
-          <ReactPaginate
+          
+        </table>
+      </div>
+      <ReactPaginate
             nextLabel="next >"
             onPageChange={handlePageClick}
             pageRangeDisplayed={2}
@@ -155,8 +166,6 @@ const Users = () => {
             activeClassName="active"
             renderOnZeroPageCount={null}
           />
-        </table>
-      </div>
     </div>
     <ModalDelete
       show = {modalDelete}
