@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from "../setup/axios";
 const LoginService = async (email, password) => {
     console.log("test")
-    return await axios.post("http://localhost:8080/api/v1/login", {
+    return await axios.post("/api/v1/login", {
         email: email,
         password: password,
     });
