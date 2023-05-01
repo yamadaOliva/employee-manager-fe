@@ -1,20 +1,23 @@
-import { useState, useEffect } from "react";
-import { getListUsers, getUserByPage, deleteUser } from "../../services/UsersService";
+import React , { useState, useEffect } from "react";
+import { getUserByPage, deleteUser } from "../../services/UsersService";
 import ReactPaginate from "react-paginate";
 import {toast} from "react-toastify";
 import {ModalDelete} from "./ModalDelete";
 import {ModalCreate} from "./ModalCreate";
 import {ModalEdit} from "./ModalEdit";
+import { UserContext } from "../../context/UserContext";
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(3);
-  const [totalPage, setTotalPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
   const [modalDelete, setModalDelete] = useState(false);
   const [idDelete, setIdDelete] = useState(0);
   const [modalCreate, setModalCreate] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [userEdit, setUserEdit] = useState({});
+  const {user} = React.useContext(UserContext);
+  console.log('test==>',user);
   const handlePageClick = (event) => {
     setPage(event.selected + 1);
   };
@@ -68,19 +71,13 @@ const Users = () => {
   }
 
   
+  
   useEffect(async () => {
+    console.log("useEffect2");
     let userList = await getUserByPage(page, limit);
     if (+userList.data.data2.EC == 200) {
       setUsers(userList.data.data2.DT.users);
       setTotalPage(+userList.data.data2.DT.totalPages);
-    } else {
-      alert(userList.data.data2.EM);
-    }
-  }, []);
-  useEffect(async () => {
-    let userList = await getUserByPage(page, limit);
-    if (+userList.data.data2.EC == 200) {
-      setUsers(userList.data.data2.DT.users);
     } else {
       alert(userList.data.data2.EM);
     }

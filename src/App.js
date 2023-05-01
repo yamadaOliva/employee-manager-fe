@@ -5,6 +5,7 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect,useState } from 'react';
 import { AppRoutes } from './routes/AppRoutes';
+import { UserProvider } from './context/UserContext';
 import _ from 'lodash';
 import {
   BrowserRouter as Router,
