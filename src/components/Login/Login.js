@@ -1,15 +1,17 @@
 import "./Login.scss";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import { toast } from "react-toastify";
 import { LoginService } from "../../services/Login";
+import { UserContext } from "../../context/UserContext";
 import axios from "axios";
 
 export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalDelete, setModalDelete] = useState(false);
+  const {login} = useContext(UserContext);
   const defaultDataInput = {
     email: true,
     password: true,
@@ -60,10 +62,17 @@ export default function Login(props) {
             case 200:
                 toast.success("Login success");
                 let data = {
-                    isAuthenticated: true,
-                    token: "fake token",
+                    auth:true,
+                    token:res.data.DT.access_token,
+                    account:{
+                        email:res.data.DT.email,
+                        roles:res.data.DT.roles
+                    }
+                    
                 }
+                login(data);
                 sessionStorage.setItem("user", JSON.stringify(data));
+
                 history.push("/users");
                 clearInput();
                 break;

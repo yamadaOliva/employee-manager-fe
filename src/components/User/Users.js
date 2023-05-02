@@ -16,8 +16,6 @@ const Users = () => {
   const [modalCreate, setModalCreate] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [userEdit, setUserEdit] = useState({});
-  const {user} = React.useContext(UserContext);
-  console.log('test==>',user);
   const handlePageClick = (event) => {
     setPage(event.selected + 1);
   };

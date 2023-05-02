@@ -1,17 +1,22 @@
 import { Route } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect,useContext } from "react";
 import _ from 'lodash';
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 const PrivateRoutes = (props) => {
    const history = useHistory();
+   const {user} = useContext(UserContext);  
     useEffect(() => {
-        let session = sessionStorage.getItem('user');
-        if(_.isEmpty(session)){
-            history.push('/login');
-        }
+       
     }, []);
+    if(user  && user.auth){
     return (
+        <>
         <Route path={props.path} component={props.component}/>
+        </>
     );
+    }else{
+        return <Redirect to="/login" />;
+    }
 };
 export default PrivateRoutes;

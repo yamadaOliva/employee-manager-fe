@@ -3,9 +3,9 @@ import Nav from './components/Navigation/Nav';
 
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect,useState } from 'react';
+import { useEffect,useState,useContext} from 'react';
 import { AppRoutes } from './routes/AppRoutes';
-import { UserProvider } from './context/UserContext';
+import { UserContext } from './context/UserContext';
 import _ from 'lodash';
 import {
   BrowserRouter as Router,
@@ -14,20 +14,14 @@ import {
   Link
 } from "react-router-dom";
 function App() {
-    const [user, setUser] = useState({});
-    const [isLogin, setIsLogin] = useState(false);
+    const {user} = useContext(UserContext);
+    console.log("test context==>",user);
     useEffect(() => {
-        let session = sessionStorage.getItem('user');
-        if(!_.isEmpty(session)){
-            setUser(JSON.parse(session));
-        }else{
-            setIsLogin(false);
-        }
     }, []);
   return (
         <Router>
             {
-                user ? <Nav/> : null
+                user.auth ? <Nav/> : null
             }
             <AppRoutes />
             <ToastContainer

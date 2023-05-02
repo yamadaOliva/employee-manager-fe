@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-const UserContext = React.createContext({name : "", auth : false});
+const UserContext = React.createContext(null);
 const UserProvider = ({children}) => {
     
-  const [user, setUser] = useState({ name: "", auth: true });
+  const [user, setUser] = useState({ token: "", auth: false, account: {} });
 
   // Login updates the user data with a name parameter
-  const login = (name) => {
-    setUser((user) => ({
-      name: name,
-      auth: true,
-    }));
+  const login = (userData) => {
+    setUser(userData);
   };
 
   // Logout updates the user data to default
