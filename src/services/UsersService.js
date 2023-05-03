@@ -1,12 +1,9 @@
-
 import axios from "../setup/axios";
 const getListUsers = () => {
   return axios.get("/api/v1/users/read");
 };
 const getUserByPage = (page, limit) => {
-  return axios.get(
-    `/api/v1/users/read?page=${page}&limit=${limit}`
-  );
+  return axios.get(`/api/v1/users/read?page=${page}&limit=${limit}`);
 };
 const deleteUser = (id) => {
   return axios.delete(`/api/v1/users/delete`, {
@@ -26,4 +23,21 @@ const getGroups = () => {
   return axios.get("/api/v1/groups/read");
 };
 
-export { getListUsers, getUserByPage, deleteUser, getGroups, createNewUser, editUser};
+const getAccount = () => {
+  console.log("getAccount");
+  return axios.get("/api/v1/account");
+};
+
+const logoutService = () => {
+  return axios.post("/api/v1/logout");
+}
+export {
+  getListUsers,
+  getUserByPage,
+  deleteUser,
+  getGroups,
+  createNewUser,
+  editUser,
+  getAccount,
+  logoutService
+};
